@@ -1,0 +1,50 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}connexion{% endblock %}
+
+{% block body %}
+    <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+        <div class="vw-25">
+            <form action="{{ path('authentication_account') }}" method="POST">
+                <p class="h4 mb-4">Connexion</p>
+
+                {% if hasError %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-ban"></i> Une erreur est survenue, le nom d'utilisateur ou le mot de passe est incorrect.
+                    </div>
+                {% endif %}
+
+                <input type="email" id="email" class="form-control mb-4" placeholder="Adresse email" name="_username" value="{{ username }}" required />
+
+                <div class="input-group mb-4">
+                    <input type="password" id="password" class="form-control password" placeholder="Mot de passe" name="_password" data-toggle="password" required />
+                    <div class="input-group-append">
+                        <div class="input-group-text"><i id="eye" class="fas fa-eye"></i></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-success btn-block my-4" type="submit">Se connecter</button>
+
+                <p>Pas encore membre ?
+                    <a href="{{ path('authentication_registration') }}" class="blue-text">Inscription</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        // password visibility
+        let inputPassword = $('input#password');
+        $('.input-group-append').click(function()  {
+            $('#eye').toggleClass('fas fa-eye-slash').toggleClass('fas fa-eye');
+            if(inputPassword.attr('type') === "password")
+                inputPassword.attr('type','text');
+            else if(inputPassword.attr('type') === "text")
+                inputPassword.attr('type','password');
+        });
+    </script>
+{% endblock %}
+

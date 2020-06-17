@@ -1,0 +1,18 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+    <div class="vw-25">
+        <p class="h4 mb-4">Inscription</p>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success btn-block my-4" type="submit">S'incrire</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+
+

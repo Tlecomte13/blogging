@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blogging | {% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+            {% include '/_partials/navbar/navbar.html.twig' %}
+        {% endblock %}
+
+        {% block notification %}
+
+            <div class="container mt-5">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} text-center">
+                            {{ message | raw }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+        {% endblock %}
+
+        {% block body %}
+
+        {% endblock %}
+
+        {% block footer %}
+            {% include '/_partials/footer/footer.html.twig' %}
+        {% endblock %}
+
+        <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+        <script src="{{ asset('js/popper.min.js') }}"></script>
+        <script src="{{ asset('js/boostrap.min.js') }}"></script>
+        <script src="{{ asset('js/all.min.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,23 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Listes des utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="container p-5 vh-100">
+        <div class="row">
+            {% for user in users %}
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="https://picsum.photos/id/{{ loop.index }}/100/100" alt="Utilisateur {{ user.email }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.email }}</h5>
+                            <p class="card-text">{{ user.createdAt | date('d/m/Y') }}</p>
+                            <a href="{{ path('user_id', {'id': user.id}) }}" class="btn btn-primary">Accès au profil</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
