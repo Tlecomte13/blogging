@@ -49,6 +49,11 @@ class User implements UserInterface
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $followers = [];
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -121,5 +126,35 @@ class User implements UserInterface
 
     public function eraseCredentials(){
 
+    }
+
+    public function getFollowers(): ?array
+    {
+        return $this->followers;
+    }
+
+    public function setFollowers(array $followers): self
+    {
+        $this->followers = $followers;
+
+        return $this;
+    }
+
+    public function addFollow($id)
+    {
+        $follows = $this->followers;
+        $follows[$id] = ['followedAt' => new \Datetime()];
+
+        $this->setFollowers($follows);
+        return $this;
+    }
+
+    public function removeFollow($id)
+    {
+        $follows = $this->followers;
+        unset($follows[$id]);
+
+        $this->setFollowers($follows);
+        return $this;
     }
 }

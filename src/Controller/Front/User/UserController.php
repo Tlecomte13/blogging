@@ -2,14 +2,21 @@
 
 namespace App\Controller\Front\User;
 
-use App\Repository\Account\FollowRepository;
 use App\Repository\Account\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class UserController extends AbstractController
 {
+    private $user;
+
+    public function __construct(Security $security)
+    {
+        $this->user = $security->getUser();
+    }
+
     /**
      * @Route("/users", name="users_list")
      * @param UserRepository $userRepository
@@ -17,6 +24,7 @@ class UserController extends AbstractController
      */
     public function users(UserRepository $userRepository)
     {
+
         return $this->render('front/user/users.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -26,17 +34,14 @@ class UserController extends AbstractController
      * @Route("/user/{id}", name="user_id")
      * @param $id
      * @param UserRepository $userRepository
-     * @param FollowRepository $followRepository
      * @return Response
      */
-    public function user($id, UserRepository $userRepository, FollowRepository $followRepository)
+    public function user($id, UserRepository $userRepository)
     {
-        $user = $userRepository->findBy(['email' => $this->getUser()->getUsername()]);
-
         return $this->render('front/user/id.html.twig', [
             'user'          => $userRepository->find($id),
-            'follow'        => $followRepository->userIsFollow($user, $id),
-            'howManyFollow' => $followRepository->howManyFollow($id)
+            'follow'        => $userRepository->isFollow($this->user->getId(), $id),
+            'howManyFollow' => $userRepository->howManyFollow($id)
         ]);
     }
 }

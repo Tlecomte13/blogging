@@ -5,6 +5,7 @@ namespace App\Repository\Account;
 use App\Entity\Account\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,33 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function isFollow($user, $id)
+    {
+        $user = $this->find($user);
+
+        if (!empty($user->getFollowers())) {
+            return array_key_exists($id, $user->getFollowers());
+        }
+
+        return false;
+    }
+
+    public function howManyFollow($id)
+    {
+        $users = $this->findAll();
+        $count = 0;
+
+        foreach ($users as $user) {
+            if (!empty($user->getFollowers())) {
+                if (array_key_exists($id, $user->getFollowers()) === true) {
+                    $count++;
+                }
+            }
+        }
+
+        return $count;
     }
 
     // /**

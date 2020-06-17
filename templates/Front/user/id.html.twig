@@ -52,18 +52,19 @@
 
 {% block javascripts %}
     <script type="text/javascript">
+        {% if follow is empty %}
+            $('button#follow').css('display', 'initial')
+            $('button#unfollow').css('display', 'none')
+        {% else %}
+            $('button#follow').css('display', 'none')
+            $('button#unfollow').css('display', 'initial')
+        {% endif %}
         $(document).ready(function () {
-            {% if follow is empty %}
-                $('button#unfollow').css('display', 'none')
-            {% else %}
-                $('button#follow').css('display', 'none')
-            {% endif %}
             $('#follow').click(function(){
                 $.ajax({
                     url: "{{ path('follow_add') }}",
                     method: "POST",
                     data: {
-                        userOne : {{ app.user.id }},
                         userTwo : {{ user.id }}
                     },
                     success: function(code, status, msgStatus)
@@ -80,8 +81,7 @@
                     url: "{{ path('follow_remove') }}",
                     method: "POST",
                     data: {
-                        userOne : {{ app.user.id }},
-                        userTwo : {{ user.id }}
+                        user : {{ user.id }}
                     },
                     success: function(code, status, msgStatus)
                     {

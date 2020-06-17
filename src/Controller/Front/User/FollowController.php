@@ -2,57 +2,57 @@
 
 namespace App\Controller\Front\User;
 
-use App\Entity\Account\Follow;
-use App\Repository\Account\FollowRepository;
+use App\Repository\Account\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Serializer;
 
 class FollowController extends AbstractController
 {
+    private $user;
+
+    public function __construct(Security $security)
+    {
+        $this->user = $security->getUser();
+    }
+
     /**
      * @Route("/follow/add", name="follow_add")
      * @param Request $request
      * @param EntityManagerInterface $manager
-     * @param FollowRepository $followRepository
+     * @param UserRepository $userRepository
      * @return Response
      */
-    public function add(Request $request, EntityManagerInterface $manager, FollowRepository $followRepository)
+    public function add(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
-        $userOne = $request->get('userOne');
-        $userTwo = $request->get('userTwo');
+        $user = $userRepository->find($this->user->getId());
 
-        if (empty($followRepository->findBy(['userOne' => $userOne, 'userTwo' => $userTwo]))) {
-            $follow = new Follow();
+        $user->addFollow($request->get('userTwo'));
+        $manager->persist($user);
+        $manager->flush();
 
-            $follow ->setUserOne($userOne)
-                ->setUserTwo($userTwo);
-
-            $manager->persist($follow);
-            $manager->flush();
-
-            return new Response('ok');
-        } else {
-            return new Response('Déjà follow');
-        }
+        return new Response('ok');
     }
 
     /**
      * @Route("/follow/remove", name="follow_remove")
      * @param Request $request
      * @param EntityManagerInterface $manager
-     * @param FollowRepository $followRepository
+     * @param UserRepository $userRepository
      * @return Response
      */
-    public function remove(Request $request, EntityManagerInterface $manager, FollowRepository $followRepository)
+    public function remove(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
-        $userOne = $request->get('userOne');
-        $userTwo = $request->get('userTwo');
-        $follow  = $followRepository->findOneBy(['userOne' => $userOne, 'userTwo' => $userTwo]);
+        $user = $userRepository->find($this->user->getId());
 
-        $manager->remove($follow);
+        $user->removeFollow($request->get('user'));
+        $manager->persist($user);
         $manager->flush();
 
         return new Response('ok');
