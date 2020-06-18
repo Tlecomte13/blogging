@@ -3,12 +3,12 @@
 {% block title %}Listes des utilisateurs{% endblock %}
 
 {% block body %}
-    <div class="container p-5 vh-100">
+    <div class="container p-5 mb-5">
         <div class="row">
             {% for user in users %}
-                <div class="col">
+                <div class="col-3">
                     <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://picsum.photos/id/{{ loop.index }}/100/100" alt="Utilisateur {{ user.email }}">
+                        <img class="card-img-top" src="https://picsum.photos/id/{{ loop.index }}/200/200" alt="Utilisateur {{ user.email }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ user.email }}</h5>
                             <p class="card-text">{{ user.createdAt | date('d/m/Y') }}</p>

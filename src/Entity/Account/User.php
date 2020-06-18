@@ -52,7 +52,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="json", nullable=true)
      */
-    private $followers = [];
+    private $subscribeTo = [];
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $followedBy = [];
 
     public function __construct()
     {
@@ -128,33 +133,47 @@ class User implements UserInterface
 
     }
 
-    public function getFollowers(): ?array
+    public function getSubscribeTo(): ?array
     {
-        return $this->followers;
+        return $this->subscribeTo;
     }
 
-    public function setFollowers(array $followers): self
+    public function setSubscribeTo(array $subscribeTo): self
     {
-        $this->followers = $followers;
+        $this->subscribeTo = $subscribeTo;
 
         return $this;
     }
 
-    public function addFollow($id)
+    public function getFollowedBy(): ?array
     {
-        $follows = $this->followers;
-        $follows[$id] = ['followedAt' => new \Datetime()];
+        return $this->followedBy;
+    }
 
-        $this->setFollowers($follows);
+    public function setFollowedBy(?array $followedBy): self
+    {
+        $this->followedBy = $followedBy;
+
         return $this;
     }
 
-    public function removeFollow($id)
+    public function addSubscribeTo($id)
     {
-        $follows = $this->followers;
+        $follows = $this->subscribeTo;
+        $follows[$id] = ['subscribeAt' => new \Datetime()];
+
+        $this->setSubscribeTo($follows);
+
+        return $this;
+    }
+
+    public function removeSubscribeTo($id)
+    {
+        $follows = $this->subscribeTo;
         unset($follows[$id]);
 
-        $this->setFollowers($follows);
+        $this->setSubscribeTo($follows);
+
         return $this;
     }
 }

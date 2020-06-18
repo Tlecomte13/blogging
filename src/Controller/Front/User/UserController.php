@@ -38,10 +38,17 @@ class UserController extends AbstractController
      */
     public function user($id, UserRepository $userRepository)
     {
+        $user = null;
+
+        if (!empty($this->user)) {
+            $user = $this->user->getId();
+        }
+
         return $this->render('front/user/id.html.twig', [
-            'user'          => $userRepository->find($id),
-            'follow'        => $userRepository->isFollow($this->user->getId(), $id),
-            'howManyFollow' => $userRepository->howManyFollow($id)
+            'user'              => $userRepository->find($id),
+            'follow'            => $userRepository->isFollow($user, $id),
+            'howManyFollow'     => $userRepository->howManyFollow($id),
+            'howManySubscribe'  => $userRepository->howManySubscribe($id)
         ]);
     }
 }

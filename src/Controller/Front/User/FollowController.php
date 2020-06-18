@@ -3,15 +3,12 @@
 namespace App\Controller\Front\User;
 
 use App\Repository\Account\UserRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Serializer;
 
 class FollowController extends AbstractController
 {
@@ -31,9 +28,17 @@ class FollowController extends AbstractController
      */
     public function add(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
-        $user = $userRepository->find($this->user->getId());
+        $userFollow = $userRepository->find($request->get('userTwo'));
 
-        $user->addFollow($request->get('userTwo'));
+        $followedBy = $userFollow->getFollowedBy();
+        $followedBy[$this->user->getId()] = ['followedAt' => new \Datetime()];
+
+        $userFollow->setFollowedBy($followedBy);
+
+        $user = $userRepository->find($this->user->getId());
+        $user->addSubscribeTo($request->get('userTwo'));
+
+        $manager->persist($userFollow);
         $manager->persist($user);
         $manager->flush();
 
@@ -49,13 +54,37 @@ class FollowController extends AbstractController
      */
     public function remove(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
-        $user = $userRepository->find($this->user->getId());
+        $userUnFollow = $userRepository->find($request->get('user'));
 
-        $user->removeFollow($request->get('user'));
+        $arr = $userUnFollow->getFollowedBy();
+
+        unset($arr[$this->user->getId()]);
+
+        $userUnFollow->setFollowedBy($arr);
+
+        $user = $userRepository->find($this->user->getId());
+        $user->removeSubscribeTo($request->get('user'));
+
+        $manager->persist($userUnFollow);
         $manager->persist($user);
         $manager->flush();
 
         return new Response('ok');
     }
 
+    /**
+     * @Route("/follow/{id}", name="follow_id")
+     * @param $id
+     * @param UserRepository $userRepository
+     * @return Response
+     */
+    public function id($id, UserRepository $userRepository)
+    {
+        $follows = $userRepository->followList($id);
+
+        return $this->render('Front/User/Stats/Follow/id.html.twig', [
+            'follows' => $follows
+        ]);
+    }
+                                                                        
 }

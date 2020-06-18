@@ -12,8 +12,14 @@
                     {{ user.email }}
                 </div>
                 <div>
-                    <button id="follow" class="btn btn-secondary">S'abonner</button>
+                    <button id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">S'abonner</button>
+                    {% if app.user is null %}
+                        <p>
+                            <a href="{{ path('authentication_account') }}">connectez-vous</a>
+                        </p>
+                    {% endif %}
                     <button id="unfollow" class="btn btn-danger">Se désabonner</button>
+
                 </div>
                 
             </div>
@@ -28,19 +34,22 @@
                 </p>
             </div>
             <div>
-                <span id="followNumber" class="badge badge-pill badge-primary" data-follow="{{ howManyFollow }}">
+                <a href="{{ path('follow_id', {'id': user.id}) }}">
+                    <span id="followNumber" class="badge badge-pill badge-primary" data-follow="{{ howManyFollow }}">
                     {{ howManyFollow }}
                 </span>
-                <p>
-                    Nombre de followers
-                </p>
+                    <p>
+                        Abonnés
+                    </p>
+                </a>
+
             </div>
             <div>
                 <span class="badge badge-pill badge-primary">
-                    45
+                    {{ howManySubscribe }}
                 </span>
                 <p>
-                    Follower suivi
+                    Abonnements
                 </p>
             </div>
         </div>
