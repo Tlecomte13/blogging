@@ -3,6 +3,7 @@
 namespace App\Controller\Front\User;
 
 use App\Repository\Account\UserRepository;
+use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,6 +36,7 @@ class UserController extends AbstractController
      * @param $id
      * @param UserRepository $userRepository
      * @return Response
+     * @throws DBALException
      */
     public function user($id, UserRepository $userRepository)
     {

@@ -83,8 +83,21 @@ class FollowController extends AbstractController
         $follows = $userRepository->followList($id);
 
         return $this->render('Front/User/Stats/Follow/id.html.twig', [
-            'follows' => $follows
+            'follows'   => $follows,
+            'user'      => $userRepository->find($id)
         ]);
     }
-                                                                        
+
+    /**
+     * @Route("/follow/search", name="follow_search")
+     * @param UserRepository $userRepository
+     * @param Request $request
+     * @return Response
+     */
+    public function search(UserRepository $userRepository, Request $request)
+    {
+        $follows = $userRepository->followList('3103', $request->get('email'));
+
+        return new Response('ok', '200', ['follows' => $follows]);
+    }
 }

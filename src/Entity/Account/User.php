@@ -59,6 +59,25 @@ class User implements UserInterface
      */
     private $followedBy = [];
 
+    /**
+     * @ORM\Column(type="string", length=20, unique=true)
+     * @Assert\Length(
+     *      max = 20,
+     *      maxMessage = "Votre pseudo ne peut pas dépasser les 20 caractères"
+     * )
+     * @Assert\Regex(
+     *      pattern     = "/^[a-zA-Z0-9]+$/i",
+     *      htmlPattern = "^[a-zA-Z0-9]+$",
+     *      message = "Les caractères spéciaux ne sont pas autorisé"
+     * )
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -173,6 +192,25 @@ class User implements UserInterface
         unset($follows[$id]);
 
         $this->setSubscribeTo($follows);
+
+        return $this;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

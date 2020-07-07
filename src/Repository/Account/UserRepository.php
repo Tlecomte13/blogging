@@ -4,6 +4,7 @@ namespace App\Repository\Account;
 
 use App\Entity\Account\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
@@ -43,24 +44,29 @@ class UserRepository extends ServiceEntityRepository
 
     /**
      * @param $id
-     * @return int
+     * @return void
+     * @throws DBALException
      */
     public function howManyFollow($id)
     {
-        $query = $this->createQueryBuilder('u')
-                      ->select('u.followedBy')
-                      ->where('u.id = :id')
-                      ->setParameter('id', $id)
-                      ->getQuery()
-                      ->getResult()
-        ;
+        $conn = $this->getEntityManager()->getConnection();
 
-        return count($query[0]['followedBy']);
+        $sql = '
+            SELECT JSON_LENGTH(user.followed_by) AS "nb followers"
+            FROM user
+            WHERE user.id = :id 
+        ';
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->execute(['id' => $id]);
+
+        return $stmt->fetchColumn();
     }
 
     /**
      * @param $id
-     * @return int
+     * @return mixed[]
      */
     public function howManySubscribe($id)
     {
@@ -75,29 +81,25 @@ class UserRepository extends ServiceEntityRepository
         return count($query[0]['subscribeTo']);
     }
 
-    public function followList($id)
+    public function followList(int $id)
     {
-        $query = $this->createQueryBuilder('u')
-                        ->select('u.followedBy')
-                        ->where('u.id = :id')
-                        ->setParameter('id', $id)
-                        ->getQuery()
-                        ->getResult()
-        ;
-        $arr = [];
-        foreach ($query[0]['followedBy'] as $key => $val) {
-            $arr[] = $this->createQueryBuilder('u')
-                            ->select('u.email, u.createdAt')
-                            ->where('u.id = :key')
-                            ->setParameter('key', $key)
-                            ->getQuery()
-                            ->getArrayResult()
-            ;
 
-        }
-        return $arr;
+        $usersIdArray = $this->createQueryBuilder('u')
+                             ->select('u.followedBy')
+                             ->where('u.id = :id')
+                             ->setParameter('id', $id)
+                             ->setMaxResults(1)
+                             ->getQuery()
+                             ->getArrayResult();
 
+        $usersId = array_keys($usersIdArray[0]['followedBy']);
 
-    }
+        return $this->createQueryBuilder('u')
+                    ->select('u.username, u.avatar')
+                    ->where('u.id IN (:usersId)')
+                    ->setParameter('usersId', $usersId)
+                    ->getQuery()
+                    ->getResult();
+}
 
 }
