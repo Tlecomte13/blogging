@@ -19,9 +19,25 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    private $connection;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+        $this->connection = $this->getEntityManager()->getConnection();
+    }
+
+    public function getLastAndFirstId(){
+        $sql = "
+            SELECT max(User.id) AS 'maxValue', min(User.id) AS 'minValue'
+            FROM User
+        ";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetch();
+
     }
 
     /**
@@ -49,7 +65,6 @@ class UserRepository extends ServiceEntityRepository
      */
     public function howManyFollow($id)
     {
-        $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
             SELECT JSON_LENGTH(user.followed_by) AS "nb followers"
@@ -57,7 +72,7 @@ class UserRepository extends ServiceEntityRepository
             WHERE user.id = :id 
         ';
 
-        $stmt = $conn->prepare($sql);
+        $stmt = $this->connection->prepare($sql);
 
         $stmt->execute(['id' => $id]);
 
@@ -67,39 +82,82 @@ class UserRepository extends ServiceEntityRepository
     /**
      * @param $id
      * @return mixed[]
+     * @throws DBALException
      */
     public function howManySubscribe($id)
     {
-        $query = $this->createQueryBuilder('u')
-                        ->select('u.subscribeTo')
-                        ->where('u.id = :id')
-                        ->setParameter('id', $id)
-                        ->getQuery()
-                        ->getResult()
-        ;
 
-        return count($query[0]['subscribeTo']);
+        $sql = '
+            SELECT JSON_LENGTH(user.subscribe_to) AS "nb abonnements"
+            FROM user
+            WHERE user.id = :id 
+        ';
+
+        $stmt = $this->connection->prepare($sql);
+
+        $stmt->execute(['id' => $id]);
+
+        return $stmt->fetchColumn();
     }
 
     public function followList(int $id)
     {
 
-        $usersIdArray = $this->createQueryBuilder('u')
-                             ->select('u.followedBy')
-                             ->where('u.id = :id')
-                             ->setParameter('id', $id)
-                             ->setMaxResults(1)
-                             ->getQuery()
-                             ->getArrayResult();
 
-        $usersId = array_keys($usersIdArray[0]['followedBy']);
+// QUERY DQL
+//
+//        $usersIdArray = $this->createQueryBuilder('u')
+//                             ->select('u.followedBy')
+//                             ->where('u.id = :id')
+//                             ->setParameter('id', $id)
+//                             ->setMaxResults(1)
+//                             ->getQuery()
+//                             ->getArrayResult();
 
-        return $this->createQueryBuilder('u')
-                    ->select('u.username, u.avatar')
-                    ->where('u.id IN (:usersId)')
-                    ->setParameter('usersId', $usersId)
-                    ->getQuery()
-                    ->getResult();
-}
+//        $usersId = array_keys($usersIdArray[0]['followedBy']);
+//
+//        return $this->createQueryBuilder('u')
+//                    ->select('u.username, u.avatar')
+//                    ->where('u.id IN (:usersId)')
+//                    ->setParameter('usersId', $usersId)
+//                    ->getQuery()
+//                    ->getResult();
+
+
+
+        $sql = "
+                SELECT user.followed_by
+                FROM user
+                WHERE user.id = :id
+                LIMIT 1
+        ";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        $json = json_decode($stmt->fetchColumn(), true);
+
+        $usersId = implode(',', array_keys($json));
+        $userParams = implode(',', array_fill(0, count(array_keys($json)), '?'));
+
+        dump($usersId);
+
+        $users = "
+                    SELECT user.username
+                    FROM user
+                    WHERE user.id IN (:usersId)
+        ";
+
+        $req = $this->connection->prepare($users);
+        $req->execute([
+            'usersId'       => $usersId
+        ]);
+
+
+        return $req->fetchAll();
+
+
+
+    }
 
 }

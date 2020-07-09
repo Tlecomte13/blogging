@@ -25,22 +25,4 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $( "input#searchUser" ).keyup(function() {
-                let value = $( this ).val();
-                $("div#searchUser div p").filter(function() {
-                    if ($(this).text().substr(0, value.length) === value){
-                        $("div#searchUser").removeClass('d-none')
-                    }else{
-                        $("div#searchUser").addClass('d-none')
-                    }
-                });
-            })
-        });
-    </script>
-
-{% endblock %}
-
 

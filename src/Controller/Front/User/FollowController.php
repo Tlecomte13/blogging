@@ -3,7 +3,9 @@
 namespace App\Controller\Front\User;
 
 use App\Repository\Account\UserRepository;
+use Datetime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,13 +27,14 @@ class FollowController extends AbstractController
      * @param EntityManagerInterface $manager
      * @param UserRepository $userRepository
      * @return Response
+     * @throws Exception
      */
     public function add(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
         $userFollow = $userRepository->find($request->get('userTwo'));
 
         $followedBy = $userFollow->getFollowedBy();
-        $followedBy[$this->user->getId()] = ['followedAt' => new \Datetime()];
+        $followedBy[$this->user->getId()] = ['followedAt' => new Datetime()];
 
         $userFollow->setFollowedBy($followedBy);
 
