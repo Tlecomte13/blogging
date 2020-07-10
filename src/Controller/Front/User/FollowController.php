@@ -32,11 +32,7 @@ class FollowController extends AbstractController
     public function add(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
         $userFollow = $userRepository->find($request->get('userTwo'));
-
-        $followedBy = $userFollow->getFollowedBy();
-        $followedBy[$this->user->getId()] = ['followedAt' => new Datetime()];
-
-        $userFollow->setFollowedBy($followedBy);
+        $userFollow->addFollowedBy($this->user->getId());
 
         $user = $userRepository->find($this->user->getId());
         $user->addSubscribeTo($request->get('userTwo'));
@@ -58,12 +54,7 @@ class FollowController extends AbstractController
     public function remove(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
         $userUnFollow = $userRepository->find($request->get('user'));
-
-        $arr = $userUnFollow->getFollowedBy();
-
-        unset($arr[$this->user->getId()]);
-
-        $userUnFollow->setFollowedBy($arr);
+        $userUnFollow->removeFollowedBy($this->user->getId());
 
         $user = $userRepository->find($this->user->getId());
         $user->removeSubscribeTo($request->get('user'));

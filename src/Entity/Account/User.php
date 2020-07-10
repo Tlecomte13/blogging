@@ -164,6 +164,26 @@ class User implements UserInterface
         return $this;
     }
 
+    public function addSubscribeTo($id)
+    {
+        $sub = $this->subscribeTo;
+        $sub[$id] = ['subscribeAt' => new \Datetime()];
+
+        $this->setSubscribeTo($sub);
+
+        return $this;
+    }
+
+    public function removeSubscribeTo($id)
+    {
+        $subs = $this->subscribeTo;
+        unset($subs[$id]);
+
+        $this->setSubscribeTo($subs);
+
+        return $this;
+    }
+
     public function getFollowedBy(): ?array
     {
         return $this->followedBy;
@@ -176,25 +196,26 @@ class User implements UserInterface
         return $this;
     }
 
-    public function addSubscribeTo($id)
+    public function addFollowedBy($id)
     {
-        $follows = $this->subscribeTo;
-        $follows[$id] = ['subscribeAt' => new \Datetime()];
+        $follows = $this->followedBy;
+        $follows[$id] = ['followedAt' => new \Datetime()];
 
-        $this->setSubscribeTo($follows);
+        $this->setFollowedBy($follows);
 
         return $this;
     }
 
-    public function removeSubscribeTo($id)
+    public function removeFollowedBy($id)
     {
-        $follows = $this->subscribeTo;
+        $follows = $this->followedBy;
         unset($follows[$id]);
 
-        $this->setSubscribeTo($follows);
+        $this->setFollowedBy($follows);
 
         return $this;
     }
+
 
     public function setUsername(string $username): self
     {

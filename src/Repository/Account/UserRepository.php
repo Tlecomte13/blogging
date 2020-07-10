@@ -105,56 +105,56 @@ class UserRepository extends ServiceEntityRepository
 
 
 // QUERY DQL
+
+        $usersIdArray = $this->createQueryBuilder('u')
+                             ->select('u.followedBy')
+                             ->where('u.id = :id')
+                             ->setParameter('id', $id)
+                             ->setMaxResults(1)
+                             ->getQuery()
+                             ->getArrayResult();
+
+        $usersId = array_keys($usersIdArray[0]['followedBy']);
+
+        return $this->createQueryBuilder('u')
+                    ->select('u.username, u.avatar')
+                    ->where('u.id IN (:usersId)')
+                    ->setParameter('usersId', $usersId)
+                    ->getQuery()
+                    ->getResult();
+
+
+
+//        $sql = "
+//                SELECT user.followed_by
+//                FROM user
+//                WHERE user.id = :id
+//                LIMIT 1
+//        ";
 //
-//        $usersIdArray = $this->createQueryBuilder('u')
-//                             ->select('u.followedBy')
-//                             ->where('u.id = :id')
-//                             ->setParameter('id', $id)
-//                             ->setMaxResults(1)
-//                             ->getQuery()
-//                             ->getArrayResult();
-
-//        $usersId = array_keys($usersIdArray[0]['followedBy']);
+//        $stmt = $this->connection->prepare($sql);
+//        $stmt->execute(['id' => $id]);
 //
-//        return $this->createQueryBuilder('u')
-//                    ->select('u.username, u.avatar')
-//                    ->where('u.id IN (:usersId)')
-//                    ->setParameter('usersId', $usersId)
-//                    ->getQuery()
-//                    ->getResult();
-
-
-
-        $sql = "
-                SELECT user.followed_by
-                FROM user
-                WHERE user.id = :id
-                LIMIT 1
-        ";
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['id' => $id]);
-
-        $json = json_decode($stmt->fetchColumn(), true);
-
-        $usersId = implode(',', array_keys($json));
-        $userParams = implode(',', array_fill(0, count(array_keys($json)), '?'));
-
-        dump($usersId);
-
-        $users = "
-                    SELECT user.username
-                    FROM user
-                    WHERE user.id IN (:usersId)
-        ";
-
-        $req = $this->connection->prepare($users);
-        $req->execute([
-            'usersId'       => $usersId
-        ]);
-
-
-        return $req->fetchAll();
+//        $json = json_decode($stmt->fetchColumn(), true);
+//
+//        $usersId = implode(',', array_keys($json));
+//        $userParams = implode(',', array_fill(0, count(array_keys($json)), '?'));
+//
+//        dump($usersId);
+//
+//        $users = "
+//                    SELECT user.username
+//                    FROM user
+//                    WHERE user.id IN (:usersId)
+//        ";
+//
+//        $req = $this->connection->prepare($users);
+//        $req->execute([
+//            'usersId'       => $usersId
+//        ]);
+//
+//
+//        return $req->fetchAll();
 
 
 
