@@ -11,6 +11,7 @@ class UserTest extends TestCase
 {
     CONST usernameValidRegex = "user";
     CONST usernameInvalidRegex = "user~-è784^";
+    CONST regexUsername = "/^[a-zA-Z0-9]+$/i";
 
     public function testWithValidUsernameRegex() {
         $user = new User();
@@ -20,7 +21,7 @@ class UserTest extends TestCase
                 ->setPassword('password')
                 ->setRoles(['ROLE_USER']);
 
-        $this->assertRegExp("/^[a-zA-Z0-9]+$/i", $user->getUsername());
+        $this->assertRegExp(self::regexUsername, $user->getUsername());
     }
 
     public function testWithInvalidUsernameRegex() {
@@ -31,7 +32,7 @@ class UserTest extends TestCase
                 ->setPassword('password')
                 ->setRoles(['ROLE_USER']);
 
-        $this->assertNotRegExp("/^[a-zA-Z0-9]+$/i", $user->getUsername());
+        $this->assertNotRegExp(self::regexUsername, $user->getUsername());
     }
 
     public function testAddFollowedBy() {

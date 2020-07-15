@@ -31,16 +31,14 @@ class NotificationService
     }
 
     /**
-     * @param $user
+     * @param $arr
      * @param $icon
      * @param $message
      * @param $status
      * @param $color
      */
-    public function newNotification($user, $icon, $message, $status, $color)
+    public function newNotification($arr, $icon, $message, $status, $color)
     {
-        $arrUsersId = $this->userRepository->followIdList($user);
-
         /**
          * S'il n'a pas de followers pas besoin d'envoyer une notification
          */
@@ -51,7 +49,7 @@ class NotificationService
                 ->setMessage($message)
                 ->setStatus($status)
                 ->setColor($color)
-                ->setUsers($arrUsersId)
+                ->setUsers($arr)
             ;
 
             $this->manager->persist($notification);
