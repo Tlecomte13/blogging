@@ -24,7 +24,7 @@
                             Mon compte
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="{{ path('account') }}" class="dropdown-item">Profil</a>
+                            <a href="{{ path('user_id', {'id': app.user.id}) }}" class="dropdown-item">Profil</a>
                             <button class="dropdown-item" type="button">Another action</button>
                             <a href="{{ path('authentication_logout') }}" class="dropdown-item">Se déconnecter</a>
                         </div>

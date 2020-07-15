@@ -12,14 +12,17 @@
                     {{ user.email }}
                 </div>
                 <div>
-                    <button id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">S'abonner</button>
-                    {% if app.user is null %}
-                        <p>
-                            <a href="{{ path('authentication_account') }}">connectez-vous</a>
-                        </p>
+                    {% if user.id == app.user.id %}
+                        <a href="{{ path('account') }}" id="follow" class="btn btn-primary">Modifier votre compte</a>
+                    {% else %}
+                        <button id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">S'abonner</button>
+                        {% if app.user is null %}
+                            <p>
+                                <a href="{{ path('authentication_account') }}">connectez-vous</a>
+                            </p>
+                        {% endif %}
+                        <button id="unfollow" class="btn btn-danger">Se désabonner</button>
                     {% endif %}
-                    <button id="unfollow" class="btn btn-danger">Se désabonner</button>
-
                 </div>
                 
             </div>
@@ -60,49 +63,51 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
-        {% if follow is empty %}
-            $('button#follow').css('display', 'initial')
-            $('button#unfollow').css('display', 'none')
-        {% else %}
-            $('button#follow').css('display', 'none')
-            $('button#unfollow').css('display', 'initial')
-        {% endif %}
-        $(document).ready(function () {
-            $('#follow').click(function(){
-                $.ajax({
-                    url: "{{ path('follow_add') }}",
-                    method: "POST",
-                    data: {
-                        userTwo : {{ user.id }}
-                    },
-                    success: function(code, status, msgStatus)
-                    {
-                        $('#follow').css('display', 'none')
-                        $('#unfollow').css('display', 'initial')
-                        let value = $('span#followNumber').data("follow")
-                        $('span#followNumber').html( value + 1).data('follow', value + 1)
-                    },
+    {% if user.id != app.user.id %}
+        <script type="text/javascript">
+            {% if follow is empty %}
+                $('button#follow').css('display', 'initial')
+                $('button#unfollow').css('display', 'none')
+            {% else %}
+                $('button#follow').css('display', 'none')
+                $('button#unfollow').css('display', 'initial')
+            {% endif %}
+            $(document).ready(function () {
+                $('#follow').click(function(){
+                    $.ajax({
+                        url: "{{ path('follow_add') }}",
+                        method: "POST",
+                        data: {
+                            user : {{ user.id }}
+                        },
+                        success: function(code, status, msgStatus)
+                        {
+                            $('#follow').css('display', 'none')
+                            $('#unfollow').css('display', 'initial')
+                            let value = $('span#followNumber').data("follow")
+                            $('span#followNumber').html( value + 1).data('follow', value + 1)
+                        },
+                    });
+                });
+                $('#unfollow').click(function(){
+                    $.ajax({
+                        url: "{{ path('follow_remove') }}",
+                        method: "POST",
+                        data: {
+                            user : {{ user.id }}
+                        },
+                        success: function(code, status, msgStatus)
+                        {
+                            $('#unfollow').css('display', 'none')
+                            $('#follow').css('display', 'initial')
+                            let value = $('span#followNumber').data("follow")
+                            $('span#followNumber').html( value - 1).data('follow', value - 1)
+                        },
+                    });
                 });
             });
-            $('#unfollow').click(function(){
-                $.ajax({
-                    url: "{{ path('follow_remove') }}",
-                    method: "POST",
-                    data: {
-                        user : {{ user.id }}
-                    },
-                    success: function(code, status, msgStatus)
-                    {
-                        $('#unfollow').css('display', 'none')
-                        $('#follow').css('display', 'initial')
-                        let value = $('span#followNumber').data("follow")
-                        $('span#followNumber').html( value - 1).data('follow', value - 1)
-                    },
-                });
-            });
-        });
-    </script>
+        </script>
+    {% endif %}
 {% endblock %}
 
 

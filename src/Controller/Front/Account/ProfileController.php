@@ -12,6 +12,9 @@ class ProfileController extends AbstractController
      */
     public function account()
     {
-        return $this->render('Front/Account/Profile/account.html.twig');
+
+        return $this->render('Front/Account/Profile/account.html.twig', [
+            'user' => $this->getUser()
+        ]);
     }
 }

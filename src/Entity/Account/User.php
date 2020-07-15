@@ -70,6 +70,9 @@ class User implements UserInterface
      *      htmlPattern = "^[a-zA-Z0-9]+$",
      *      message = "Les caractères spéciaux ne sont pas autorisé"
      * )
+     *
+     * @Assert\Unique
+     *
      */
     private $username;
 
@@ -144,10 +147,6 @@ class User implements UserInterface
 
     }
 
-    public function getUsername(){
-        return $this->email;
-    }
-
     public function eraseCredentials(){
 
     }
@@ -166,8 +165,11 @@ class User implements UserInterface
 
     public function addSubscribeTo($id)
     {
+        $date = new \DateTime();
+        $newDate =  $date->format('Y-m-d H:i:s');
+
         $sub = $this->subscribeTo;
-        $sub[$id] = ['subscribeAt' => new \Datetime()];
+        $sub[$id] = ['subscribeAt' => $newDate];
 
         $this->setSubscribeTo($sub);
 
@@ -198,8 +200,11 @@ class User implements UserInterface
 
     public function addFollowedBy($id)
     {
+        $date = new \DateTime();
+        $newDate =  $date->format('Y-m-d H:i:s');
+
         $follows = $this->followedBy;
-        $follows[$id] = ['followedAt' => new \Datetime()];
+        $follows[$id] = ['followedAt' => $newDate];
 
         $this->setFollowedBy($follows);
 
@@ -216,6 +221,9 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getUsername(){
+        return $this->username;
+    }
 
     public function setUsername(string $username): self
     {

@@ -3,7 +3,6 @@
 namespace App\Controller\Front\User;
 
 use App\Repository\Account\UserRepository;
-use Datetime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,11 +30,15 @@ class FollowController extends AbstractController
      */
     public function add(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
-        $userFollow = $userRepository->find($request->get('userTwo'));
-        $userFollow->addFollowedBy($this->user->getId());
-
+        $userFollow = $userRepository->find($request->get('user'));
         $user = $userRepository->find($this->user->getId());
-        $user->addSubscribeTo($request->get('userTwo'));
+
+        if (empty($userFollow) || empty($user)){
+            throw new \Exception('Utilisateur demandé n\'existe pas', 404);
+        }
+
+        $userFollow->addFollowedBy($this->user->getId());
+        $user->addSubscribeTo($request->get('user'));
 
         $manager->persist($userFollow);
         $manager->persist($user);
@@ -50,13 +53,18 @@ class FollowController extends AbstractController
      * @param EntityManagerInterface $manager
      * @param UserRepository $userRepository
      * @return Response
+     * @throws Exception
      */
     public function remove(Request $request, EntityManagerInterface $manager, UserRepository $userRepository)
     {
         $userUnFollow = $userRepository->find($request->get('user'));
-        $userUnFollow->removeFollowedBy($this->user->getId());
-
         $user = $userRepository->find($this->user->getId());
+
+        if (empty($userUnFollow) || empty($user)){
+            throw new \Exception('Utilisateur demandé n\'existe pas', 404);
+        }
+
+        $userUnFollow->removeFollowedBy($this->user->getId());
         $user->removeSubscribeTo($request->get('user'));
 
         $manager->persist($userUnFollow);
@@ -80,18 +88,5 @@ class FollowController extends AbstractController
             'follows'   => $follows,
             'user'      => $userRepository->find($id)
         ]);
-    }
-
-    /**
-     * @Route("/follow/search", name="follow_search")
-     * @param UserRepository $userRepository
-     * @param Request $request
-     * @return Response
-     */
-    public function search(UserRepository $userRepository, Request $request)
-    {
-        $follows = $userRepository->followList('3103', $request->get('email'));
-
-        return new Response('ok', '200', ['follows' => $follows]);
     }
 }
