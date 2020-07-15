@@ -100,6 +100,19 @@ class UserRepository extends ServiceEntityRepository
         return $stmt->fetchColumn();
     }
 
+    public function followIdList(int $id)
+    {
+        $usersIdArray = $this->createQueryBuilder('u')
+            ->select('u.followedBy')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_keys($usersIdArray[0]['followedBy']);
+    }
+
     public function followList(int $id)
     {
 
