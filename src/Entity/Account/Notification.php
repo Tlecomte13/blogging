@@ -47,6 +47,11 @@ class Notification
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $view = [];
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -125,6 +130,18 @@ class Notification
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getView(): ?array
+    {
+        return $this->view;
+    }
+
+    public function setView(array $view): self
+    {
+        $this->view = $view;
 
         return $this;
     }

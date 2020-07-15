@@ -3,9 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Blogging | {% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+        {{ encore_entry_link_tags('app') }}
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -35,10 +33,9 @@
             {% include '/_partials/footer/footer.html.twig' %}
         {% endblock %}
 
-        <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
-        <script src="{{ asset('js/popper.min.js') }}"></script>
-        <script src="{{ asset('js/boostrap.min.js') }}"></script>
-        <script src="{{ asset('js/all.min.js') }}"></script>
-        {% block javascripts %}{% endblock %}
+        {{ encore_entry_script_tags('app') }}
+        {% block javascripts %}
+
+        {% endblock %}
     </body>
 </html>
