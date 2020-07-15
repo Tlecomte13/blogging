@@ -3,7 +3,6 @@
 namespace App\Controller\Front\User;
 
 use App\Repository\Account\UserRepository;
-use App\Service\NotificationService;
 use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

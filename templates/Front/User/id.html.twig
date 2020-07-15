@@ -29,7 +29,7 @@
         
         <div class="d-flex justify-content-between mt-5 mb-5">
             <div>
-                <span class="badge badge-pill badge-primary">
+                <span class="badge rounded-pill bg-danger">
                     12
                 </span>
                 <p>
@@ -38,7 +38,7 @@
             </div>
             <div>
                 <a href="{{ path('follow_id', {'id': user.id}) }}">
-                    <span id="followNumber" class="badge badge-pill badge-primary" data-follow="{{ howManyFollow }}">
+                    <span id="followNumber" class="badge rounded-pill bg-danger" data-follow="{{ howManyFollow }}">
                     {{ howManyFollow }}
                 </span>
                     <p>
@@ -48,7 +48,7 @@
 
             </div>
             <div>
-                <span class="badge badge-pill badge-primary">
+                <span class="badge rounded-pill bg-danger">
                     {{ howManySubscribe }}
                 </span>
                 <p>

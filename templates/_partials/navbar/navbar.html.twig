@@ -19,53 +19,56 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 {% if app.user %}
-                    <div class="btn-group mr-4">
-                        <a
-                                class="nav-link"
-                                href="#"
-                                id="navbarDropdownMenuLink"
-                                role="button"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                        >
-                            <i class="fas fa-bell"></i>
-                            <span class="badge rounded-pill badge-notification bg-danger">
+                    <div class="d-flex justify-content-start">
+                        <div class="mr-4">
+                            <a
+                                    class="nav-link"
+                                    href="#"
+                                    id="navbarDropdownMenuLink"
+                                    role="button"
+                                    data-toggle="dropdown"
+                                    aria-expanded="false"
+                            >
+                                <i class="fas fa-bell"></i>
+                                <span class="badge rounded-pill badge-notification bg-danger">
                                 {{ NotificationService.getNotification['Length'] }}
                             </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" style="width: 300px">
-                            {% if NotificationService.getNotification['Length'] == 0 %}
-                                <p class="p-2 mb-0">Vous n'avez pas de notification.</p>
-                            {% endif %}
-                            {% for notification in NotificationService.getNotification['Notification'] %}
-                                <div class="d-flex align-items-center">
-                                    <div class="p-3">
-                                        <i class="fas fa-{{ notification.icon }} {{ notification.status }}"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="width: 300px">
+                                {% if NotificationService.getNotification['Length'] == 0 %}
+                                    <p class="p-2 mb-0">Vous n'avez pas de notification.</p>
+                                {% endif %}
+                                {% for notification in NotificationService.getNotification['Notification'] %}
+                                    <div class="d-flex align-items-center">
+                                        <div class="p-3">
+                                            <i class="fas fa-{{ notification.icon }} {{ notification.status }}"></i>
+                                        </div>
+                                        <p class="mb-0">{{ notification.message }}</p>
                                     </div>
-                                    <p class="mb-0">{{ notification.message }}</p>
-                                </div>
-                                <span class="font-size-date d-flex justify-content-end mr-2">{{ notification.createdAt | date('d/m/Y H:i:s') }}</span>
-                                <hr>
-                            {% endfor %}
+                                    <span class="font-size-date d-flex justify-content-end mr-2">{{ notification.createdAt | date('d/m/Y H:i:s') }}</span>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="mr-5">
+                            <a
+                                    class="nav-link"
+                                    href="#"
+                                    id="navbarDropdownMenuLink"
+                                    role="button"
+                                    data-toggle="dropdown"
+                                    aria-expanded="false"
+                            >
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="{{ path('user_id', {'id': app.user.id}) }}" class="dropdown-item">Profil</a>
+                                <button class="dropdown-item" type="button">Another action</button>
+                                <a href="{{ path('authentication_logout') }}" class="dropdown-item">Se déconnecter</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="btn-group mr-5">
-                        <a
-                                class="nav-link"
-                                href="#"
-                                id="navbarDropdownMenuLink"
-                                role="button"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                        >
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a href="{{ path('user_id', {'id': app.user.id}) }}" class="dropdown-item">Profil</a>
-                            <button class="dropdown-item" type="button">Another action</button>
-                            <a href="{{ path('authentication_logout') }}" class="dropdown-item">Se déconnecter</a>
-                        </div>
-                    </div>
+
                 {% else %}
                     <a class="nav-link" href="{{ path('authentication_account') }}">Connexion / Inscription</a>
                 {% endif %}
