@@ -2,7 +2,19 @@
     width: 25vw;
 }
 
+.vw-50{
+    width: 50vw;
+}
+
 .font-size-date{
     font-size: 10px;
     color: lightgrey;
+}
+
+.avatar-radius {
+    border-radius: 50%;
+}
+
+.number-font-size {
+    font-size: x-large;
 }

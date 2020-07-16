@@ -3,61 +3,128 @@
 {% block title %}{{ user.email }}{% endblock %}
 
 {% block body %}
-    <div class="container vh-100">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <img src="https://picsum.photos/id/237/200/200" alt="avatar">
-                </div>
-                <div>
-                    {{ user.email }}
-                </div>
-                <div>
-                    {% if user.id == app.user.id %}
-                        <a href="{{ path('account') }}" id="follow" class="btn btn-primary">Modifier votre compte</a>
-                    {% else %}
-                        <button id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">S'abonner</button>
-                        {% if app.user is null %}
-                            <p>
-                                <a href="{{ path('authentication_account') }}">connectez-vous</a>
+    <div class="container vh-100 vw-50">
+            <div class="row">
+                <div class="row">
+                    <div class="col-4">
+                        <img src="https://picsum.photos/id/237/200/200" alt="avatar" class="avatar-radius" >
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-xl-7">
+                                <h1>{{ user.username }}</h1>
+                            </div>
+                            <div class="col-xl mt-1">
+                                {% if user.id == app.user.id %}
+                                    <a href="{{ path('account') }}" id="follow" class="btn btn-primary">Modifier votre compte</a>
+                                {% else %}
+{#                                    <button id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">S'abonner</button>#}
+
+                                    <div class="btn-group">
+                                        <button type="button" id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">
+                                            S'abonner
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                                                data-toggle="dropdown"
+                                                aria-expanded="false"
+                                                id="follow-drop"
+                                        >
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-paper-plane"></i> Message privé
+                                                </a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-ban"></i> Bloquer
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    {% if app.user is null %}
+                                        <p>
+                                            <a href="{{ path('authentication_account') }}">connectez-vous</a>
+                                        </p>
+                                    {% endif %}
+
+                                    <div class="btn-group">
+                                        <button type="button" id="unfollow" class="btn btn-danger {% if app.user is null %} disabled {% endif %}">
+                                            Se désabonner
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                                                data-toggle="dropdown"
+                                                aria-expanded="false"
+                                                id="unfollow-drop"
+                                        >
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-paper-plane-o"></i> Message privé
+                                                </a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-ban"></i> Bloquer</a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <p>
+                                    <strong class="number-font-size">
+                                    12
+                                    </strong>
+                                    Articles
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p>
+                                    <a href="{{ path('follow_id', {'id': user.id}) }}" class="text-decoration-none text-black">
+                                    <strong class="number-font-size" id="followNumber" data-follow="{{ howManyFollow }}">
+                                        {{ howManyFollow }}
+                                    </strong>
+                                    Abonnés
+                                    </a>
+                                </p>
+
+                            </div>
+                            <div class="col">
+                                <p>
+                                <strong class="number-font-size">
+                                    {{ howManySubscribe }}
+                                </strong>
+                                    Abonnements
+                                </p>
+
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                Blanditiis magnam nihil praesentium sapiente voluptates!
+                                Adipisci dolor dolorem est explicabo facilis itaque
+                                modi molestiae nihil officia quia quod reiciendis, soluta voluptates!
                             </p>
-                        {% endif %}
-                        <button id="unfollow" class="btn btn-danger">Se désabonner</button>
-                    {% endif %}
+                        </div>
+
+
+                    </div>
                 </div>
-                
-            </div>
-        
-        <div class="d-flex justify-content-between mt-5 mb-5">
-            <div>
-                <span class="badge rounded-pill bg-danger">
-                    12
-                </span>
-                <p>
-                    Nombre d'articles
-                </p>
-            </div>
-            <div>
-                <a href="{{ path('follow_id', {'id': user.id}) }}">
-                    <span id="followNumber" class="badge rounded-pill bg-danger" data-follow="{{ howManyFollow }}">
-                    {{ howManyFollow }}
-                </span>
-                    <p>
-                        Abonnés
-                    </p>
-                </a>
 
             </div>
-            <div>
-                <span class="badge rounded-pill bg-danger">
-                    {{ howManySubscribe }}
-                </span>
-                <p>
-                    Abonnements
-                </p>
-            </div>
-        </div>
 
-        <h4 class="text-white">Les articles les plus récents</h4>
+        <hr>
 
     </div>
 {% endblock %}
@@ -66,11 +133,11 @@
     {% if user.id != app.user.id %}
         <script type="text/javascript">
             {% if follow is empty %}
-                $('button#follow').css('display', 'initial')
-                $('button#unfollow').css('display', 'none')
+                $('button#follow, #follow-drop').css('display', 'initial')
+                $('button#unfollow, #unfollow-drop').css('display', 'none')
             {% else %}
-                $('button#follow').css('display', 'none')
-                $('button#unfollow').css('display', 'initial')
+                $('button#follow, #follow-drop').css('display', 'none')
+                $('button#unfollow, #unfollow-drop').css('display', 'initial')
             {% endif %}
             $(document).ready(function () {
                 $('#follow').click(function(){
@@ -82,10 +149,10 @@
                         },
                         success: function(code, status, msgStatus)
                         {
-                            $('#follow').css('display', 'none')
-                            $('#unfollow').css('display', 'initial')
-                            let value = $('span#followNumber').data("follow")
-                            $('span#followNumber').html( value + 1).data('follow', value + 1)
+                            $('#follow, #follow-drop').css('display', 'none')
+                            $('#unfollow, #unfollow-drop').css('display', 'initial')
+                            let value = $('strong#followNumber').data("follow")
+                            $('strong#followNumber').html( value + 1).data('follow', value + 1)
                         },
                     });
                 });
@@ -98,10 +165,10 @@
                         },
                         success: function(code, status, msgStatus)
                         {
-                            $('#unfollow').css('display', 'none')
-                            $('#follow').css('display', 'initial')
-                            let value = $('span#followNumber').data("follow")
-                            $('span#followNumber').html( value - 1).data('follow', value - 1)
+                            $('#unfollow, #unfollow-drop').css('display', 'none')
+                            $('#follow, #follow-drop').css('display', 'initial')
+                            let value = $('strong#followNumber').data("follow")
+                            $('strong#followNumber').html( value - 1).data('follow', value - 1)
                         },
                     });
                 });
