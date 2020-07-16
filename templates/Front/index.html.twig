@@ -7,3 +7,21 @@
     <h1 class="text-center mt-5">Open Source Blogging ✅</h1>
 </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        // Append the topic(s) to subscribe as query parameter
+        const url = new URL('{{ MERCURE_PUBLISH_URL }}');
+        url.searchParams.append('topic', '/ping');
+
+        const es = new EventSourcePolyfill(url, {
+            headers: {
+                'Authorization': 'Bearer {{ subscriber_token }}'
+            }
+        });
+
+        es.onmessage = e => { console.log(e.data); }
+
+    </script>
+{% endblock %}

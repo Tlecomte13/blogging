@@ -3,3 +3,4 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
     globals:
         NotificationService: '@App\Service\NotificationService'
+        MERCURE_PUBLISH_URL: '%env(MERCURE_PUBLISH_URL)%'

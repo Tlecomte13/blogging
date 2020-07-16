@@ -105,6 +105,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.4"
     },
+    "lcobucci/jwt": {
+        "version": "3.3.2"
+    },
     "league/csv": {
         "version": "9.0.0"
     },

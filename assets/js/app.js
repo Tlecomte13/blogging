@@ -21,3 +21,9 @@ import '@fortawesome/fontawesome-free/js/all.min'
 
 // file utility JS
 import './Utility/button-form-loader.js'
+
+// event-source-polyfill
+let { NativeEventSource, EventSourcePolyfill } = require('event-source-polyfill/src/eventsource');
+const EventSource = NativeEventSource || EventSourcePolyfill
+global.EventSource = EventSource;
+global.EventSourcePolyfill = EventSourcePolyfill;
