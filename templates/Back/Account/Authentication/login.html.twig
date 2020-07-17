@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Back-office | Blogging</title>
+    {{ encore_entry_link_tags('app') }}
+</head>
+<body class="admin-login">
+    <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+    <div class="vw-30">
+        <div class="bg-white p-5">
+            <form action="{{ path('admin_authentication_account') }}" method="POST" id="login">
+                <p class="h4 mb-4">Connexion</p>
+
+                {% if hasError %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-ban"></i> Une erreur est survenue, le nom d'utilisateur ou le mot de passe est incorrect.
+                    </div>
+                {% endif %}
+
+                <div class="form-outline">
+                    <input type="email" class="form-control mb-4" id="email" name="_username" value="{{ username }}" required />
+                    <label for="email" class="form-label">Adresse e-mail</label>
+                </div>
+
+                <div class="form-outline">
+                    <input type="password" class="form-control" id="password" name="_password" data-toggle="password" required />
+                    <label for="password" class="form-label">Mot de passe</label>
+                </div>
+
+                <button id="submit" class="btn btn-danger btn-block my-4" type="submit">
+                    Se connecter
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+    {{ encore_entry_script_tags('app') }}
+</body>
+</html>
+

@@ -17,6 +17,7 @@
         "@fortawesome/fontawesome-free": "^5.13.1",
         "event-source-polyfill": "^1.0.15",
         "jquery": "^3.5.1",
-        "mdb-ui-kit": "^1.0.0-alpha3"
+        "mdb-ui-kit": "^1.0.0-alpha3",
+        "popper.js": "^1.16.1"
     }
 }
