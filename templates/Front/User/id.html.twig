@@ -18,8 +18,6 @@
                                 {% if user.id == app.user.id %}
                                     <a href="{{ path('account') }}" id="follow" class="btn btn-primary">Modifier votre compte</a>
                                 {% else %}
-{#                                    <button id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">S'abonner</button>#}
-
                                     <div class="btn-group">
                                         <button type="button" id="follow" class="btn btn-secondary {% if app.user is null %} disabled {% endif %}">
                                             S'abonner

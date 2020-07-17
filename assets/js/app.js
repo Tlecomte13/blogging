@@ -19,8 +19,9 @@ global.$ = global.jQuery = $;
 import 'mdb-ui-kit';
 import '@fortawesome/fontawesome-free/js/all.min'
 
-// file utility JS
+// button-loader
 import './Utility/button-form-loader.js'
+import './Utility/progressBar'
 
 // event-source-polyfill
 let { NativeEventSource, EventSourcePolyfill } = require('event-source-polyfill/src/eventsource');
