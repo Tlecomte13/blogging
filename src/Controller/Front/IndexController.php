@@ -16,42 +16,14 @@ class IndexController extends AbstractController
 
     /**
      * @Route("/", name="homepage")
-     * @param MercureCookieGeneratorService $cookieGenerator
      * @return Response
      */
-    public function index(MercureCookieGeneratorService $cookieGenerator)
+    public function index()
     {
-        $token = $cookieGenerator->generate($this->getUser());
 
-        $response =  $this->render('Front/index.html.twig', [
-            'controller_name' => 'IndexController',
-            'subscriber_token' =>  $token['twig']
+        return $this->render('Front/index.html.twig', [
+            'controller_name' => 'IndexController'
         ]);
-
-        $response->headers->set(
-            'TAGROSSEMER',
-            $token['all']
-        );
-
-        return $response;
-    }
-
-    /**
-     * @Route("/push/{user}", name="push")
-     * @param PublisherInterface $publisher
-     * @return JsonResponse
-     */
-    public function push(PublisherInterface $publisher)
-    {
-
-        $update = new Update('/ping',
-            json_encode(['message' => 'Hello World!']),
-        true
-        );
-
-        $publisher($update);
-
-        return $this->json('Done');
 
     }
 }

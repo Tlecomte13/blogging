@@ -9,7 +9,6 @@
 import 'mdb-ui-kit/css/mdb.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import '../css/master.css'
-import '../css/admin.css'
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // create global $ and jQuery variables
@@ -23,9 +22,3 @@ import '@fortawesome/fontawesome-free/js/all.min'
 // button-loader
 import './Utility/button-form-loader.js'
 import './Utility/progressBar'
-
-// event-source-polyfill
-let { NativeEventSource, EventSourcePolyfill } = require('event-source-polyfill/src/eventsource')
-const EventSource = NativeEventSource || EventSourcePolyfill
-global.EventSource = EventSource
-global.EventSourcePolyfill = EventSourcePolyfill

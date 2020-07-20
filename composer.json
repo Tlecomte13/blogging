@@ -7,7 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "lcobucci/jwt": "^3.3",
+        "cboden/ratchet": "^0.4.3",
         "league/csv": "9.0",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
@@ -21,7 +21,6 @@
         "symfony/http-client": "5.1.*",
         "symfony/intl": "5.1.*",
         "symfony/mailer": "5.1.*",
-        "symfony/mercure-bundle": "^0.2.5",
         "symfony/mime": "5.1.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/notifier": "5.1.*",
@@ -88,7 +87,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "5.1.*"
         }
     }
