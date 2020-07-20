@@ -7,12 +7,13 @@ namespace App\Service;
 use App\Entity\Account\Notification;
 use App\Repository\Account\NotificationRepository;
 use App\Repository\Account\UserRepository;
+use App\Websocket\NotificationHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 class NotificationService
 {
-    private $userRepository, $notificationRepository, $manager, $user;
+    private $userRepository, $notificationRepository, $manager, $user, $websocket;
 
     /**
      * NotificationService constructor.
@@ -20,14 +21,17 @@ class NotificationService
      * @param EntityManagerInterface $manager
      * @param NotificationRepository $notificationRepository
      * @param Security $security
+     * @param NotificationHandler $notificationHandler
      */
     public function __construct(UserRepository $userRepository, EntityManagerInterface $manager,
-                                NotificationRepository $notificationRepository, Security $security)
+                                NotificationRepository $notificationRepository,
+                                Security $security, NotificationHandler $notificationHandler)
     {
         $this->userRepository           = $userRepository;
         $this->manager                  = $manager;
         $this->notificationRepository   = $notificationRepository;
         $this->user                     = $security->getUser();
+        $this->websocket                = $notificationHandler;
     }
 
     /**
@@ -56,6 +60,8 @@ class NotificationService
             $this->manager->flush();
 
         }
+
+        $this->websocket->onMessage();
     }
 
     public function getNotification()

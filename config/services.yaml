@@ -4,7 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    mercure_secret_key: '%env(MERCURE_JWT_KEY)%'
 
 services:
     _defaults:
@@ -25,7 +24,3 @@ services:
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: console.command }
-
-    App\Service\MercureCookieGeneratorService:
-        arguments:
-            $secret: '%env(MERCURE_JWT_KEY)%'

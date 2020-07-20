@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller\Ratchet;
+namespace App\Controller\Websocket;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WebsocketController extends AbstractController
+class NotificationController extends AbstractController
 {
     /**
      * @Route("/websocket", name="websocket")
@@ -13,7 +13,7 @@ class WebsocketController extends AbstractController
     public function index()
     {
         return $this->render('ratchet/websocket/index.html.twig', [
-            'controller_name' => 'WebsocketController',
+            'ws_url' => 'localhost:8080',
         ]);
     }
 }

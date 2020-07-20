@@ -1,67 +1,72 @@
+{% extends 'Back/base.html.twig' %}
+
 {% block body %}
-    <style>
-        body {
-            font-family: arial;
-        }
+        <style>
+            body {
+                font-family: arial;
+            }
 
-        .form-group {
-            margin-bottom: 10px;
-        }
+            .form-group {
+                margin-bottom: 10px;
+            }
 
-        input {
-            border: solid lightgrey 1px;
-            padding: 8px;
-        }
+            input {
+                border: solid lightgrey 1px;
+                padding: 8px;
+            }
 
-        label {
-            display: inline-block;
-            min-width: 150px;
-        }
+            label {
+                display: inline-block;
+                min-width: 150px;
+            }
 
-        #chat {
-            height: 400px;
-            width: 600px;
-            border: solid lightgrey 1px;
-            overflow: auto;
-            margin-bottom: 20px;
-        }
+            #chat {
+                height: 400px;
+                width: 600px;
+                border: solid lightgrey 1px;
+                overflow: auto;
+                margin-bottom: 20px;
+            }
 
-        button {
-            padding: 6px 12px;
-        }
+            button {
+                padding: 6px 12px;
+            }
 
-        .message {
-            padding: 10px 5px;
-            margin-bottom: 10px;
-            border-bottom: solid lightgrey 1px;
-        }
-    </style>
+            .message {
+                padding: 10px 5px;
+                margin-bottom: 10px;
+                border-bottom: solid lightgrey 1px;
+            }
+        </style>
 
 
-    <div id="chat">
+        <div id="chat">
 
-    </div>
-    <div>
-        <div class="form-group">
-            <label for="name">Name:</label> <input type="text" id="name">
         </div>
-        <div class="form-group">
-            <label for="message">Message:</label> <input type="text" id="message">
+        <div>
+            <div class="form-group">
+                <label for="name">Name:</label> <input type="text" id="name">
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label> <input type="text" id="message">
+            </div>
+            <button type="button" id="sendBtn">Send</button>
         </div>
-        <button type="button" id="sendBtn">Send</button>
-    </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript">
-        const socket = new WebSocket("ws://localhost:3001");
+    <script>
+        const socket = new WebSocket("ws://localhost:8080");
+
+        var currentUser = {{ app.user.id }}
 
         socket.addEventListener("open", function() {
             console.log("CONNECTED");
         });
 
-        function addMessage(name, message) {
-            const messageHTML = "<div class='message'><strong>" + name + ":</strong> " + message + "</div>";
+        function addMessage(name, message, currentUser) {
+            const messageHTML = "<div class='message'><strong>" + name + ":</strong> " +
+                "<strong>(" + currentUser + ")</strong>" + message + "</div>";
             document.getElementById("chat").innerHTML += messageHTML
         }
 
@@ -70,7 +75,7 @@
             try
             {
                 const message = JSON.parse(e.data);
-                addMessage(message.name, message.message);
+                addMessage(message.name, message.message, message.currentUser);
             }
             catch(e)
             {
@@ -83,10 +88,12 @@
 
             const message = {
                 name: document.getElementById("name").value,
-                message: document.getElementById("message").value
+                message: document.getElementById("message").value,
+                currentUser: currentUser
             };
             socket.send(JSON.stringify(message));
-            addMessage(message.name, message.message);
+            addMessage(message.name, message.message, message.currentUser);
         });
+
     </script>
 {% endblock %}

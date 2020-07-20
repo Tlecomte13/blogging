@@ -16,6 +16,10 @@
             </div>
         {% endblock %}
 
+        <div id="ws-content-receiver">
+            Connecting...
+        </div>
+
         {% block navbar %}
             {% include '/_partials/navbar/navbar.html.twig' %}
         {% endblock %}
@@ -44,8 +48,5 @@
 
         {{ encore_entry_script_tags('app') }}
         {% block javascripts %}{% endblock %}
-        <script type="text/javascript">
-
-        </script>
     </body>
 </html>
