@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front\User;
 
+use App\Entity\Account\User;
 use App\Repository\Account\UserRepository;
 use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,25 +33,25 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/{id}", name="user_id")
-     * @param $id
+     * @Route("/user/{user}", name="user_id")
+     * @param User $user
      * @param UserRepository $userRepository
      * @return Response
      * @throws DBALException
      */
-    public function user($id, UserRepository $userRepository)
+    public function user($user, UserRepository $userRepository)
     {
-        $user = null;
 
-        if (!empty($this->user)) {
-            $user = $this->user->getId();
-        }
+        $user = $userRepository->findOneBy([
+            'username' => $user
+        ]);
+
 
         return $this->render('front/user/id.html.twig', [
-            'user'              => $userRepository->find($id),
-            'follow'            => $userRepository->isFollow($user, $id),
-            'howManyFollow'     => $userRepository->howManyFollow($id),
-            'howManySubscribe'  => $userRepository->howManySubscribe($id)
+            'user'              => $user,
+            'follow'            => $userRepository->isFollow($user, $this->user->getId()),
+            'howManyFollow'     => $userRepository->howManyFollow($user->getId()),
+            'howManySubscribe'  => $userRepository->howManySubscribe($user->getId())
         ]);
     }
 }

@@ -1,4 +1,4 @@
-{% extends 'Back/base.html.twig' %}
+{% extends 'Front/base.html.twig' %}
 
 {% block body %}
         <style>
@@ -39,61 +39,19 @@
             }
         </style>
 
+<div class="container vh-100">
+    <div id="chat">
 
-        <div id="chat">
-
+    </div>
+    <div>
+        <div class="form-group">
+            <label for="name">Name:</label> <input type="text" id="name">
         </div>
-        <div>
-            <div class="form-group">
-                <label for="name">Name:</label> <input type="text" id="name">
-            </div>
-            <div class="form-group">
-                <label for="message">Message:</label> <input type="text" id="message">
-            </div>
-            <button type="button" id="sendBtn">Send</button>
+        <div class="form-group">
+            <label for="message">Message:</label> <input type="text" id="message">
         </div>
-{% endblock %}
+        <button type="button" id="sendBtn">Send</button>
+    </div>
+</div>
 
-{% block javascripts %}
-    <script>
-        const socket = new WebSocket("ws://localhost:8080");
-
-        var currentUser = {{ app.user.id }}
-
-        socket.addEventListener("open", function() {
-            console.log("CONNECTED");
-        });
-
-        function addMessage(name, message, currentUser) {
-            const messageHTML = "<div class='message'><strong>" + name + ":</strong> " +
-                "<strong>(" + currentUser + ")</strong>" + message + "</div>";
-            document.getElementById("chat").innerHTML += messageHTML
-        }
-
-        socket.addEventListener("message", function(e) {
-            console.log(e.data);
-            try
-            {
-                const message = JSON.parse(e.data);
-                addMessage(message.name, message.message, message.currentUser);
-            }
-            catch(e)
-            {
-                // Catch any errors
-            }
-        });
-
-
-        document.getElementById("sendBtn").addEventListener("click", function() {
-
-            const message = {
-                name: document.getElementById("name").value,
-                message: document.getElementById("message").value,
-                currentUser: currentUser
-            };
-            socket.send(JSON.stringify(message));
-            addMessage(message.name, message.message, message.currentUser);
-        });
-
-    </script>
 {% endblock %}

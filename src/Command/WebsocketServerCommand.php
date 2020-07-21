@@ -15,6 +15,11 @@ class WebsocketServerCommand extends Command
 {
     protected static $defaultName = "run:websocket-server";
 
+    public function __construct(string $name = null)
+    {
+        parent::__construct($name);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $port = 8080;

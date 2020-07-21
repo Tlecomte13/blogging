@@ -12,7 +12,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ user.email }}</h5>
                             <p class="card-text">{{ user.createdAt | date('d/m/Y') }}</p>
-                            <a href="{{ path('user_id', {'id': user.id}) }}" class="btn btn-primary">Accès au profil</a>
+                            <a href="{{ path('user_id', {'user': user.username}) }}" class="btn btn-primary">Accès au profil</a>
                         </div>
                     </div>
                 </div>

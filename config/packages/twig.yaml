@@ -4,3 +4,5 @@ twig:
     globals:
         NotificationService: '@App\Service\NotificationService'
         RATCHET_URL: '%env(RATCHET_URL)%'
+        getFollowers: '@App\Repository\Account\UserRepository'
+

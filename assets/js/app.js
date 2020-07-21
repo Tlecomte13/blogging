@@ -17,6 +17,7 @@ global.$ = global.jQuery = $;
 
 // mdbootstrap 5 + fontawesome
 import 'mdb-ui-kit'
+import 'bootstrap'
 import '@fortawesome/fontawesome-free/js/all.min'
 
 // button-loader

@@ -61,7 +61,6 @@ class NotificationService
 
         }
 
-        $this->websocket->onMessage();
     }
 
     public function getNotification()

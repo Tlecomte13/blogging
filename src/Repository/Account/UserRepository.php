@@ -47,12 +47,10 @@ class UserRepository extends ServiceEntityRepository
      */
     public function isFollow($user, $id)
     {
-        if (!is_null($user)) {
-            $user = $this->find($user);
+        $currentUser = $this->find($id);
 
-            if (!empty($user->getSubscribeTo())) {
-                return array_key_exists($id, $user->getSubscribeTo());
-            }
+        if (!is_null($user) && !is_null($currentUser)) {
+            return array_key_exists($user->getId(), $currentUser->getSubscribeTo());
         }
 
         return false;
@@ -115,19 +113,9 @@ class UserRepository extends ServiceEntityRepository
 
     public function followList(int $id)
     {
+        // QUERY DQL
 
-
-// QUERY DQL
-
-        $usersIdArray = $this->createQueryBuilder('u')
-                             ->select('u.followedBy')
-                             ->where('u.id = :id')
-                             ->setParameter('id', $id)
-                             ->setMaxResults(1)
-                             ->getQuery()
-                             ->getArrayResult();
-
-        $usersId = array_keys($usersIdArray[0]['followedBy']);
+        $usersId = $this->onlyFollowersId($id);
 
         return $this->createQueryBuilder('u')
                     ->select('u.username, u.avatar')
@@ -136,41 +124,19 @@ class UserRepository extends ServiceEntityRepository
                     ->getQuery()
                     ->getResult();
 
+    }
 
+    public function onlyFollowersId($id)
+    {
+        $usersIdArray = $this->createQueryBuilder('u')
+            ->select('u.followedBy')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult();
 
-//        $sql = "
-//                SELECT user.followed_by
-//                FROM user
-//                WHERE user.id = :id
-//                LIMIT 1
-//        ";
-//
-//        $stmt = $this->connection->prepare($sql);
-//        $stmt->execute(['id' => $id]);
-//
-//        $json = json_decode($stmt->fetchColumn(), true);
-//
-//        $usersId = implode(',', array_keys($json));
-//        $userParams = implode(',', array_fill(0, count(array_keys($json)), '?'));
-//
-//        dump($usersId);
-//
-//        $users = "
-//                    SELECT user.username
-//                    FROM user
-//                    WHERE user.id IN (:usersId)
-//        ";
-//
-//        $req = $this->connection->prepare($users);
-//        $req->execute([
-//            'usersId'       => $usersId
-//        ]);
-//
-//
-//        return $req->fetchAll();
-
-
-
+        return array_keys($usersIdArray[0]['followedBy']);
     }
 
 }

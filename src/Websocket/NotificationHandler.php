@@ -1,45 +1,40 @@
 <?php
 namespace App\Websocket;
 
+use Exception;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
-use Symfony\Component\Security\Core\Security;
+use SplObjectStorage;
 
 
 class NotificationHandler implements MessageComponentInterface
 {
-    private $users = [];
-    private $currentUser;
+    protected $connections = [];
 
-    public function __construct(Security $security)
+    public function __construct()
     {
-        $this->users = new \SplObjectStorage();
-        $this->currentUser = $security->getUser();
+        $this->connections = new SplObjectStorage;
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
-        $this->users[$conn->resourceId] = [
-            'connection' => $conn,
-            'id' => $this->currentUser,
-            'channels' => []
-        ];
+        $this->connections->attach($conn);
     }
 
-    public function onClose(ConnectionInterface $closedConnection)
+    public function onClose(ConnectionInterface $conn)
     {
-        unset($this->users[$closedConnection->resourceId]);
+        $this->connections->detach($conn);
     }
 
-    public function onError(ConnectionInterface $conn, \Exception $e)
+    public function onError(ConnectionInterface $conn, Exception $e)
     {
-        $conn->send('An error has occurred: '.$e->getMessage());
+        $this->connections->detach($conn);
         $conn->close();
     }
 
     public function onMessage(ConnectionInterface $from, $message)
     {
-        foreach($this->users as $connection)
+        foreach($this->connections as $connection)
         {
             if($connection === $from)
             {
@@ -48,7 +43,4 @@ class NotificationHandler implements MessageComponentInterface
             $connection->send($message);
         }
     }
-
-
-
 }
