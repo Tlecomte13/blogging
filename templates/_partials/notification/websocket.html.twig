@@ -12,13 +12,15 @@
             "        <div class=\"toast-header bg-" + message.status + " text-white\">\n" +
             "            <i class=\"fas fa-"+ message.icon +" fa-lg mr-2\"></i>\n" +
             "            <strong id=\"title-alert\" class=\"mr-auto\">"+ message.title +"</strong>\n" +
-            "            <small id=\"date-alert\">maintenant</small>\n" +
             "            <button type=\"button\" class=\"ml-2 my-1 close text-white\" data-dismiss=\"toast\" aria-label=\"Close\">\n" +
             "                <span aria-hidden=\"true\">×</span>\n" +
             "            </button>\n" +
             "        </div>\n" +
             "        <div id=\"content-alert\" class=\"toast-body\">\n" +
             "\n" +     message.content +
+            "        </div>\n" +
+            "        <div class=\"toast-footer toast-body text-right\">\n" +
+            "\n" +     "Il y a quelques secondes" + "<i class=\"fas fa-clock fa-lg ml-2\"></i> "+
             "        </div>\n" +
             "\n" +
             "    </div>")

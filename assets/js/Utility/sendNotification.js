@@ -6,7 +6,7 @@ if (follow != null){
         const notification = {
             currentUser : currentUser,
             follow      : window.location.pathname.split('/')[2],
-            title       : "Nouveau follow",
+            title       : "Nouveau abonné(e)",
             content     : "<strong>" + currentUser + "</strong>" + " vient de s'abonner !",
             icon        : "user",
             status      : "success"
