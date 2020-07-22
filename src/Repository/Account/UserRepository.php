@@ -45,7 +45,7 @@ class UserRepository extends ServiceEntityRepository
      * @param $id
      * @return bool
      */
-    public function isFollow($user, $id)
+    public function isFollow($user, $id = null)
     {
         $currentUser = $this->find($id);
 
@@ -61,7 +61,7 @@ class UserRepository extends ServiceEntityRepository
      * @return void
      * @throws DBALException
      */
-    public function howManyFollow($id)
+    public function howManyFollow($id = null)
     {
 
         $sql = '
@@ -82,7 +82,7 @@ class UserRepository extends ServiceEntityRepository
      * @return mixed[]
      * @throws DBALException
      */
-    public function howManySubscribe($id)
+    public function howManySubscribe($id = null)
     {
 
         $sql = '

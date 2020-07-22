@@ -26,6 +26,3 @@ import '@fortawesome/fontawesome-free/js/all.min'
 // button-loader
 import './Utility/button-form-loader.js'
 import './Utility/progressBar'
-
-//web socket
-import './Websocket/websocket'

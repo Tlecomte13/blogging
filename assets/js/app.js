@@ -22,4 +22,9 @@ import '@fortawesome/fontawesome-free/js/all.min'
 
 // button-loader
 import './Utility/button-form-loader.js'
+
+// top progressBar
 import './Utility/progressBar'
+
+// sendNotification with websocket
+import './Utility/sendNotification'

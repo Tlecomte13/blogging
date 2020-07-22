@@ -173,19 +173,6 @@
             });
         </script>
     {% endif %}
-
-    <script>
-        document.getElementById("follow").addEventListener("click", function() {
-
-            const notification = {
-                currentUser: currentUser,
-                follow: window.location.pathname.split('/')[2]
-            }
-
-            socket.send(JSON.stringify(notification))
-            console.log('ok')
-        });
-    </script>
 {% endblock %}
 
 
