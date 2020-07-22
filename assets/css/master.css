@@ -23,6 +23,10 @@
     max-height: 50px;
 }
 
+.avatar-edit-account {
+    max-height: 100px;
+}
+
 .number-font-size {
     font-size: x-large;
 }

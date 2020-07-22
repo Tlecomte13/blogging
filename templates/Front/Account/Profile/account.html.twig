@@ -56,6 +56,10 @@
                             aria-labelledby="v-pills-home-tab"
                     >
                         {{ form_start(mainEdit) }}
+                        {% if user.avatar %}
+                            <img src="{{ asset('uploads/avatar/' ~ user.avatar) }}" alt="avatar" class="avatar-radius avatar-edit-account mb-3">
+                        {% endif %}
+                        {{ form_widget(mainEdit.avatar) }}
                         {{ form_widget(mainEdit) }}
                         <button type="submit" class="btn btn-success">Modifier</button>
                         {{ form_end(mainEdit) }}

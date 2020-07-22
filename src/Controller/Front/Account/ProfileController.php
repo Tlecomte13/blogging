@@ -4,6 +4,7 @@ namespace App\Controller\Front\Account;
 
 use App\Form\Account\MainEditType;
 use App\Repository\Account\UserRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -37,8 +38,9 @@ class ProfileController extends AbstractController
             if ($avatar) {
                 $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
-//                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $originalFilename.'-'.uniqid().'.'.$avatar->guessExtension();
+                $slugger = new Slugify();
+                $safeFilename = $slugger->slugify($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$avatar->guessExtension();
 
                 // Move the file to the directory where brochures are stored
                 try {
