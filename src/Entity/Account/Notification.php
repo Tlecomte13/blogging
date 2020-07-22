@@ -52,6 +52,12 @@ class Notification
      */
     private $view = [];
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notifications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sender;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -142,6 +148,18 @@ class Notification
     public function setView(array $view): self
     {
         $this->view = $view;
+
+        return $this;
+    }
+
+    public function getSender(): ?User
+    {
+        return $this->sender;
+    }
+
+    public function setSender(?User $sender): self
+    {
+        $this->sender = $sender;
 
         return $this;
     }

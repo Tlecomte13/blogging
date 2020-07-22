@@ -46,8 +46,6 @@ class NotificationService
         /**
          * S'il n'a pas de followers pas besoin d'envoyer une notification
          */
-        if (!empty($arrUsersId)){
-
             $notification = new Notification();
             $notification->setIcon($icon)
                 ->setMessage($message)
@@ -58,8 +56,6 @@ class NotificationService
 
             $this->manager->persist($notification);
             $this->manager->flush();
-
-        }
 
     }
 

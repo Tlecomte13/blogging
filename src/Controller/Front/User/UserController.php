@@ -4,8 +4,10 @@ namespace App\Controller\Front\User;
 
 use App\Entity\Account\User;
 use App\Repository\Account\UserRepository;
+use App\Service\NotificationService;
 use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -45,6 +47,7 @@ class UserController extends AbstractController
         $user = $userRepository->findOneBy([
             'username' => $user
         ]);
+
 
 
         return $this->render('front/user/id.html.twig', [

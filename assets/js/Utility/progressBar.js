@@ -16,15 +16,15 @@ $(function ()
 });
 
 function myLoop(time) {
-    setTimeout(function() {
+    setTimeout(function () {
         $('.progress-bar').attr({
-            "aria-valuenow" : i,
-            "style"         : "width:" + i + "%"
+            "aria-valuenow": i,
+            "style": "width:" + i + "%"
         })
         i++;
         if (i < 101) {
             myLoop();
-            if (i === 100){
+            if (i === 100) {
                 setTimeout(function () {
                     $('div.progress').fadeOut()
                 }, 1000)

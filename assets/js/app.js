@@ -29,6 +29,5 @@ import './Utility/progressBar'
 // sendNotification with websocket
 import './Utility/sendNotification'
 
-// moment.js
-import moment from 'moment/moment'
-global.moment = moment();
+//DateNotification
+import './Utility/dateNotification'

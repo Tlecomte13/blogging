@@ -1,0 +1,8 @@
+<script>
+
+    let time = $('#notification-date').text()
+    time = moment(time).locale('fr').fromNow()
+
+    $('#notification-date').html(time)
+    console.log(time)
+</script>
