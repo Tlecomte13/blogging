@@ -1,6 +1,6 @@
 {% extends 'Front/base.html.twig' %}
 
-{% block title %}{{ user.email }}{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
 
 {% block body %}
     <div class="container vh-100 vw-50">
@@ -110,7 +110,7 @@
                         </div>
                         <div class="row mt-3">
                             <p>
-                                {{ user.description | u.truncate(200, '...') }}
+                                {{ user.description | u.truncate(500, '...') }}
                             </p>
                         </div>
 

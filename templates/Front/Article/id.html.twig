@@ -1,0 +1,91 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}{{ article.slug }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container-fluid vw-85 vh-100">
+        <div class="row">
+            <h3 class="mb-4">{{ article.title }}</h3>
+            <div class="col-lg">
+                <div class="card shadow-2 mb-5 ">
+                    <div class="card-body">
+                        <p class="card-text">
+                            {{ article.content }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-5" style="max-width: 18rem;">
+                    <div class="card-header text-capitalize">
+                        <strong>{{ article.username }}</strong>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>
+                                {{ nbArticle }} Article(s)
+                            </li>
+                            <li>
+                                {{ article.nbFollow }} Abonné(s)
+                            </li>
+                            <li>
+                                {{ article.nbSubscribe }} Abonnement(s)
+                            </li>
+                        </ul>
+                        <h5>Tags</h5>
+                        <span class="badge rounded-pill bg-primary">
+                            {{ article.tags | join(', ')  }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg">
+                {{ form_start(form) }}
+                <div id="editor">
+                    {{ form_widget(form) }}
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-secondary">Commenter</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        let quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],        // toggled buttons
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }],          // dropdown with defaults from theme
+                    [{ 'align': [] }],
+                    ['link', 'image']
+
+                ]
+            },
+            theme: 'snow',  // Specify theme in configuration
+            placeholder: 'Compose an epic...',
+        });
+    </script>
+{% endblock %}

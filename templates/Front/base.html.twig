@@ -17,11 +17,11 @@
         {% endblock %}
 
         {% block navbar %}
-            {% include '/_partials/navbar/navbar.html.twig' %}
+            {% include 'Front/_partials/navbar/navbar.html.twig' %}
         {% endblock %}
 
         {% block alert %}
-            {% include '/_partials/notification/alert.html.twig' %}
+            {% include 'Front/_partials/notification/alert.html.twig' %}
         {% endblock %}
 
         {% block notification %}
@@ -41,18 +41,18 @@
         {% endblock %}
 
         {% block footer %}
-            {% include '/_partials/footer/footer.html.twig' %}
+            {% include 'Front/_partials/footer/footer.html.twig' %}
         {% endblock %}
 
         {{ encore_entry_script_tags('app') }}
         {% block javascripts %}{% endblock %}
 
         {% block websocket %}
-            {% include '/_partials/notification/websocket.html.twig' %}
+            {% include 'Front/_partials/notification/websocket.html.twig' %}
         {% endblock %}
 
         {% block momentjs %}
-            {% include '/_partials/notification/navbar_notification.html.twig' %}
+            {% include 'Front/_partials/notification/navbar_notification.html.twig' %}
         {% endblock %}
     </body>
 </html>

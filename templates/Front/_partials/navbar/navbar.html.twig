@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Tendances</a>
+                <a class="nav-link" href="{{ path('articles') }}">Articles</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('users_list') }}">Utilisateurs</a>
@@ -22,7 +22,7 @@
                     {% set notificationLength = NotificationService.getNotification['Length'] %}
                     <div class="d-flex justify-content-start">
 
-                        {% include '_partials/navbar/notification.html.twig' %}
+                        {% include 'Front/_partials/navbar/notification.html.twig' %}
 
                         <div class="mr-5">
                             <a

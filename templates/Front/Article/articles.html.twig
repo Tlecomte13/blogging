@@ -1,0 +1,38 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Listes des articles{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-end mt-5 mb-5">
+            <a href="" class="btn btn-success">Publier un article</a>
+        </div>
+        {% for article in articles %}
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="d-flex justify-content-end">
+                        <img src="https://picsum.photos/id/237/200/200" alt="article photo">
+                    </div>
+                </div>
+                <div class="col-lg">
+                    <h3 class="mb-3">{{ article.title }}</h3>
+                    <p>
+                        {{ article.content | u.truncate('500','...') }}
+                    </p>
+                    <a href="{{ path('article_id', {'username' : article.createdBy.username, 'slug': article.slug}) }}"
+                       class="btn btn-primary">
+                        Accès a l'article
+                    </a>
+                    <p class="mt-5">
+                        Crée par <strong>{{ article.createdBy.username }}</strong> | {{ article.createdAt | date('d/m/Y H:i:s') }} | tags:
+                        <span class="badge rounded-pill bg-primary">
+                            {{ article.tags | join(', ')  }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+
+    </div>
+{% endblock %}

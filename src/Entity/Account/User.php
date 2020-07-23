@@ -2,6 +2,8 @@
 
 namespace App\Entity\Account;
 
+use App\Entity\Article\Article;
+use App\Entity\Article\Comment;
 use App\Repository\Account\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -90,10 +92,22 @@ class User implements UserInterface
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="createdBy")
+     */
+    private $articles;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="createdBy")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->notifications = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -293,6 +307,68 @@ class User implements UserInterface
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->contains($article)) {
+            $this->articles->removeElement($article);
+            // set the owning side to null (unless already changed)
+            if ($article->getCreatedBy() === $this) {
+                $article->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getCreatedBy() === $this) {
+                $comment->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }
