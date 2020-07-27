@@ -10,11 +10,14 @@ use App\Entity\Article\Comment;
 use App\Form\Article\CommentType;
 use App\Repository\Article\ArticleRepository;
 use App\Repository\Article\CommentRepository;
+use App\Service\Image\UploadedBase64FileService;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Encoder\Base64ContentEncoder;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
@@ -37,26 +40,49 @@ class ArticleController extends AbstractController
      * @param Article $slug
      * @param ArticleRepository $articleRepository
      * @param Request $request
-     * @param EntityManagerInterface $manager
      * @param CommentRepository $commentRepository
+     * @param EntityManagerInterface $manager
+     * @param UploadedBase64FileService $base64FileService
      * @return Response
      * @throws DBALException
      */
     public function articleId($username, $slug, ArticleRepository $articleRepository, Request $request,
-                              EntityManagerInterface $manager, CommentRepository $commentRepository)
+                              CommentRepository $commentRepository, EntityManagerInterface $manager,
+                              UploadedBase64FileService $base64FileService)
     {
+
+        $article = $articleRepository->findOneBy([
+            'slug' => $slug
+        ]);
 
         $comment = new Comment();
 
-        $form = $this->createForm(CommentType::class, $comment);
 
-        $form->handleRequest($request);
+        if ($request->get('content')) {
+
+            $content = $request->get('content');
+
+
+            $comment->setArticle($article)
+                    ->setCreatedBy($this->getUser())
+                    ->setContent($content);
+
+            $manager->persist($comment);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre commentaire a bien été publié !'
+            );
+
+        }
 
         return $this->render('Front/Article/id.html.twig', [
             'article' => $articleRepository->findArticleWithUserAndSlug($username, $slug),
             'nbArticle' => $articleRepository->howManyArticles($username),
-            'comment' => $commentRepository->findAll(),
-            'form' => $form->createView()
+            'comment' => $commentRepository->findBy([
+                'article' => $article
+            ])
         ]);
     }
 }

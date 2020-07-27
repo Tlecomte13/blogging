@@ -42,3 +42,11 @@
 .bg-grey:hover{
     background-color: rgb(227, 227, 227);
 }
+
+.color-pair:nth-child(2n){
+    background-color: rgb(245, 245, 245);
+}
+
+.bg-black-light{
+    background-color: rgb(157, 157, 157);
+}

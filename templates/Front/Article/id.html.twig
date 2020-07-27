@@ -8,7 +8,7 @@
 
 
 {% block body %}
-    <div class="container-fluid vw-85 vh-100">
+    <div class="container-fluid vw-85" style="margin-bottom: 50%">
         <div class="row">
             <h3 class="mb-4">{{ article.title }}</h3>
             <div class="col-lg">
@@ -45,18 +45,34 @@
                 </div>
             </div>
         </div>
+
+        {% for c in comment %}
+            <div class="row mb-5 ml-1" style="width: 62vw">
+                <div class="col-lg-9 pr-0 shadow-2 color-pair">
+                    <div class="p-3">
+                        {{ c.content | raw }}
+                    </div>
+                </div>
+                <div class="col-lg pl-0 pr-0" style="min-height: 250px">
+                    <div class="bg-black-light shadow-2" style="width: 100%; height: 250px">
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset('uploads/avatar/' ~ c.createdBy.avatar) }}" alt="{{ c.createdBy.username }}"
+                                 class="avatar-radius mt-3 avatar-edit-account"
+                            >
+                        </div>
+                        <h3 class="text-white text-center mt-2">{{ c.createdBy.username }}</h3>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
         <div class="row">
             <div class="col-lg">
-                {{ form_start(form) }}
                 <div id="editor">
-                    {{ form_widget(form) }}
                 </div>
-
                 <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-secondary">Commenter</button>
+                    <button id="comment" type="submit" class="btn btn-secondary">Commenter</button>
                 </div>
-
-                {{ form_end(form) }}
             </div>
             <div class="col-lg-3">
 
@@ -85,7 +101,25 @@
                 ]
             },
             theme: 'snow',  // Specify theme in configuration
-            placeholder: 'Compose an epic...',
+            placeholder: 'Commenter cet article...',
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#comment').click(function(){
+                $.ajax({
+                    url: "{{ path('article_id', {'username': article.username, 'slug' : article.slug}) }}",
+                    method: "POST",
+                    data: {
+                        content : $('.ql-editor').html()
+                    },
+                    success: function()
+                    {
+                        location.reload()
+                    },
+                });
+            });
         });
     </script>
 {% endblock %}

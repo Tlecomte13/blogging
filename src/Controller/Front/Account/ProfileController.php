@@ -33,32 +33,22 @@ class ProfileController extends AbstractController
             /** @var UploadedFile $avatar */
             $avatar = $mainEdit->get('avatar')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($avatar) {
                 $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
+
                 $slugger = new Slugify();
                 $safeFilename = $slugger->slugify($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$avatar->guessExtension();
 
-                // Move the file to the directory where brochures are stored
+
                 try {
-                    $avatar->move(
-                        $this->getParameter('avatar_directory'),
-                        $newFilename
-                    );
+                    $avatar->move($this->getParameter('avatar_directory'), $newFilename);
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+
                 }
 
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
                 $this->getUser()->setAvatar($newFilename);
             }
-
-            // ... persist the $product variable or any other work
-
 
             $manager->persist($this->getUser());
             $manager->flush();

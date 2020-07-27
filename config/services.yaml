@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     avatar_directory: '%kernel.project_dir%/public/uploads/avatar'
+    comment_directory: '%kernel.project_dir%/public/uploads/comment/'
+
 services:
     _defaults:
         autowire: true
