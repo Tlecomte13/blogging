@@ -6,6 +6,7 @@
 parameters:
     avatar_directory: '%kernel.project_dir%/public/uploads/avatar'
     comment_directory: '%kernel.project_dir%/public/uploads/comment/'
+    article_directory: '%kernel.project_dir%/public/uploads/article/'
 
 services:
     _defaults:

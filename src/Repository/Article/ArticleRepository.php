@@ -60,14 +60,40 @@ class ArticleRepository extends ServiceEntityRepository
                 SELECT COUNT(*) AS 'nbArticle'
                 FROM article
                 JOIN user ON article.created_by_id = user.id
-                WHERE user.username = :id
+                WHERE user.username = :username
         ";
 
         $stmt = $this->connection->prepare($sql);
 
-        $stmt->execute(['id' => $username]);
+        $stmt->execute(['username' => $username]);
 
         return $stmt->fetchColumn();
     }
 
+    /**
+     * @param $id
+     * @return mixed[]
+     * @throws DBALException
+     */
+    public function getArticles($id)
+    {
+        $sql = "
+                SELECT  
+                    article.title ,article.created_at, 
+                    article.slug, user.username 
+                FROM article
+                    JOIN user ON article.created_by_id = user.id              
+                WHERE user.id = :id  
+        ";
+        $stmt = $this->connection->prepare($sql);
+
+        $stmt->execute(['id' => $id]);
+
+        $arr = $stmt->fetchAll();
+
+        return [
+            'nbArticle' => count($arr),
+            'articles' => $arr
+        ];
+    }
 }

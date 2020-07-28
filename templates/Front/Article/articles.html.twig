@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container">
         <div class="d-flex justify-content-end mt-5 mb-5">
-            <a href="" class="btn btn-success">Publier un article</a>
+            <a href="{{ path('article_add') }}" class="btn btn-success">Publier un article</a>
         </div>
         {% for article in articles %}
             <div class="row">

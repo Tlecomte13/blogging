@@ -63,6 +63,11 @@ class Article
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $public;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -200,6 +205,18 @@ class Article
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPublic(): ?bool
+    {
+        return $this->public;
+    }
+
+    public function setPublic(bool $public): self
+    {
+        $this->public = $public;
 
         return $this;
     }
