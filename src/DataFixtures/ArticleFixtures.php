@@ -20,28 +20,28 @@ class ArticleFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $faker = Factory::create('fr-FR');
-
-        $admin = $this->user->findOneBy([
-            'username' => 'admin'
-        ]);
-
-        for ($i = 0; $i < 100; $i++){
-
-            $article = new Article();
-
-            $article->setTitle($faker->text(60))
-                    ->setContent($faker->paragraph(40))
-                    ->setTags(['tags1', 'tags2', 'tags3'])
-                    ->setCreatedBy($admin)
-            ;
-
-            $manager->persist($article);
-
-
-        }
-
-
-        $manager->flush();
+//        $faker = Factory::create('fr-FR');
+//
+//        $admin = $this->user->findOneBy([
+//            'username' => 'admin'
+//        ]);
+//
+//        for ($i = 0; $i < 100; $i++){
+//
+//            $article = new Article();
+//
+//            $article->setTitle($faker->text(60))
+//                    ->setContent($faker->paragraph(40))
+//                    ->setTags(['tags1', 'tags2', 'tags3'])
+//                    ->setCreatedBy($admin)
+//            ;
+//
+//            $manager->persist($article);
+//
+//
+//        }
+//
+//
+//        $manager->flush();
     }
 }

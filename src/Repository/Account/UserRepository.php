@@ -40,6 +40,15 @@ class UserRepository extends ServiceEntityRepository
 
     }
 
+    public function getAllJson()
+    {
+        return $this->createQueryBuilder('u')
+                    ->select('u.id, u.username, u.email, u.roles, u.createdAt')
+                    ->getQuery()
+                    ->getArrayResult()
+        ;
+    }
+
     /**
      * @param $user
      * @param $id

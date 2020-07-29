@@ -1,9 +1,92 @@
 {% extends 'Back/base.html.twig' %}
 
 {% block title %}Utilisateurs {% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-
+    <div class="container-fluid mt-5">
+        <table id="myTable" class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Roles</th>
+                    <th>createdAt</th>
+                </tr>
+            </thead>
+        </table>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+
+    <script>
+        $(document).ready( function () {
+            $('#myTable').DataTable({
+                data: {{ users.content | raw }},
+                columns: [
+                    { data: "id" },
+                    { data: "username" },
+                    { data: "email" },
+                    { data: "roles" },
+                    { data: "createdAt" }
+                ],
+                "aoColumnDefs": [
+                    {
+                        "aTargets": [5],
+                        "mData": "userId",
+                        "mRender": function (data, type, full) {
+                            return '<button href="#"' + 'id="'+ data + '">Edit</button>';
+                        }
+                    }
+                ],
+                columnDefs: [ {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                } ],
+                select: {
+                    style:    'os',
+                    blurable: true
+                },
+                order: [[ 1, 'asc' ]],
+                "language": {
+                    "sEmptyTable":     "Aucune donnée disponible dans le tableau",
+                    "sInfo":           "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty":      "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered":   "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix":    "",
+                    "sInfoThousands":  ",",
+                    "sLengthMenu":     "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing":     "Traitement...",
+                    "sSearch":         "Rechercher :",
+                    "sZeroRecords":    "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst":    "Premier",
+                        "sLast":     "Dernier",
+                        "sNext":     "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+                }
+            });
+        } );
+    </script>
 {% endblock %}
