@@ -6,6 +6,7 @@ use App\Entity\Article\Article;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -40,6 +41,13 @@ class ArticleType extends AbstractType
                 'label' => 'Titre',
                 'attr'  => [
                     'class' => 'mb-4'
+                ]
+            ])
+            ->add('content', TextAreaType::class, [
+                'label' => 'Contenu de l\'article',
+                'attr'  => [
+                    'class' => 'mb-4',
+                    'rows'  => '6'
                 ]
             ])
             ->add('tags', TextType::class, [

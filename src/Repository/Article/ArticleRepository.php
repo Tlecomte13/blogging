@@ -79,7 +79,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         $sql = "
                 SELECT  
-                    article.title ,article.created_at, 
+                    article.title ,article.created_at, article.image,
                     article.slug, user.username 
                 FROM article
                     JOIN user ON article.created_by_id = user.id              

@@ -126,7 +126,7 @@
             {% for article in articles['articles'] %}
                 <div class="bg-image hover-overlay ripple mb-3" data-ripple-color="light">
                     <img
-                            src="https://picsum.photos/id/{{ loop.index }}/300/300"
+                            src="{{ asset('uploads/article/' ~ article.image) }}"
                             class="img-fluid"
                     />
                     <a href="{{ path('article_id', {'username' : article.username, 'slug' : article.slug}) }}">

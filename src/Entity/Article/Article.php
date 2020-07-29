@@ -33,7 +33,7 @@ class Article
     private $content;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string")
      */
     private $tags;
 
@@ -103,12 +103,12 @@ class Article
         return $this;
     }
 
-    public function getTags(): ?array
+    public function getTags(): ?string
     {
         return $this->tags;
     }
 
-    public function setTags(array $tags): self
+    public function setTags(string $tags): self
     {
         $this->tags = $tags;
 

@@ -32,7 +32,9 @@ class ArticleController extends AbstractController
     public function articles(ArticleRepository $articleRepository)
     {
         return $this->render('Front/Article/articles.html.twig', [
-            'articles' => $articleRepository->findAll()
+            'articles' => $articleRepository->findBy([], [
+                'createdAt' => 'DESC'
+            ])
         ]);
     }
 
@@ -62,9 +64,8 @@ class ArticleController extends AbstractController
                 $safeFilename = $slugger->slugify($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
 
-
                 try {
-                    $image->move($this->getParameter('avatar_directory'), $newFilename);
+                    $image->move($this->getParameter('article_directory'), $newFilename);
                 } catch (FileException $e) {
 
                 }
@@ -72,15 +73,16 @@ class ArticleController extends AbstractController
                 $article->setImage($newFilename);
             }
 
-            $article->setTags(null);
             $article->setCreatedBy($this->getUser());
             $manager->persist($article);
             $manager->flush();
 
             $this->addFlash(
                 'success',
-                "<strong>Succès:</strong> Votre compte à bien été modifié"
+                "<strong>Succès:</strong> Votre article a bien été publié"
             );
+
+            return $this->redirectToRoute('articles');
 
         }
 
